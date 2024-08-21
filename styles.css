@@ -1,11 +1,58 @@
-body{
-    background-image: url(img/star-wars-backgrounds-25_bc15ec98.jpeg);
-}
-
-#navegador{
-    background-color: #000000;
-}
-
 .navbar-brand{
     color: #ffe81f;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #000;
+}
+
+.estrellas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: black;
+    z-index: -1;
+}
+
+.estrella {
+    position: absolute;
+    background: #ffe81f;
+    border-radius: 50%;
+    width: 2px;
+    height: 2px;
+    opacity: 0.8;
+    animation: parpadear 1.3s infinite;
+}
+.titulo-center{
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    color: #ffe81f;
+    text-align: center;
+}
+
+.accordion{
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+}
+
+@keyframes parpadear {
+    0%, 100% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 0.2;
+    }
 }
