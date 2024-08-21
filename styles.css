@@ -1,0 +1,11 @@
+body{
+    background-image: url(img/star-wars-backgrounds-25_bc15ec98.jpeg);
+}
+
+#navegador{
+    background-color: #000000;
+}
+
+.navbar-brand{
+    color: #ffe81f;
+}
