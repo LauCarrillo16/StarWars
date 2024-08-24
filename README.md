@@ -17,3 +17,16 @@ Este proyecto tiene como principal objetivo realizar consultas a la API, se debe
 > [!IMPORTANT]
 > Enlace a la API Utilizada en el proyecto 
 > [SWAPI ](https://swapi.dev/about)
+
+
+###   CONTRIBUCIONES
+Todas las contribuciones son bien recibidas y se agradece a toda persona que contribuya en el desarrollo de este proyecto 
+
+>[!IMPORTANT]
+>Si desea generar cambios, se recomienda crear una rama aparte de la rama main y luego ser anexada al proyecto  con la respectiva contribucion para ser evaluada por los autores del proyecto  para evitar los conflictos con los archivos y contenido de la rama principal del proyecto
+
+
+## AUTORES  🛠️
+🙋🏻‍♀️Laura Yuliana Carrillo Almeida 
+🙋🏻‍♂️Luis Felipe Velandia LLanes 
+
