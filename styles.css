@@ -22,7 +22,7 @@ body {
 }
 
 .estrellas {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
@@ -56,15 +56,12 @@ body {
     font-family: 'StarJedi';
 }
 
-.btn-group{
+#btnPelis{
     position: absolute;
     left: 79%;
     top: 70px;
     z-index: 2;
 }
-
-
-
 
 .accordion{
     position: absolute;
@@ -75,7 +72,19 @@ body {
     height: 80%;
 }
 
+#personajes{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    padding: 50px 100px;
+}
 
+#btnPersonas{
+    position: absolute;
+    left: 75%;
+    top: 70px;
+    z-index: 2;
+}
 
 @keyframes parpadear {
     0%, 100% {

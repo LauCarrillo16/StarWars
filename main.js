@@ -67,16 +67,136 @@ function acordeonPeliculas(pelis, criterio) {
     });
 }
 
+// Función para obtener y renderizar los personajes filtrados y ordenados
+async function contenedorPersonas(perso, criterio) {
+    const container = document.querySelector('#personajes .row');
+    container.innerHTML = '';
+
+    let personajesFiltrados;
+
+    if (criterio === 'female') {
+        personajesFiltrados = perso.results.filter(personaje => personaje.gender === 'female');
+    } else if (criterio === 'male') {
+        personajesFiltrados = perso.results.filter(personaje => personaje.gender === 'male');
+    } else if (criterio === 'noSpecies') {
+        personajesFiltrados = perso.results.filter(personaje => personaje.species.length === 0);
+    } else if (criterio === 'droid') {
+        personajesFiltrados = perso.results.filter(personaje => personaje.species.includes("https://swapi.dev/api/species/2/"));
+    } else {
+        personajesFiltrados = perso.results;
+    }
+
+    // Ordenar los personajes por nombre
+    personajesFiltrados.sort((a, b) => {
+        const nameComparison = a.name.localeCompare(b.name);
+        return nameComparison;
+    });
+
+    const primerosDiezPersonajes = personajesFiltrados.slice(0, 10);
+
+    for (const personaje of primerosDiezPersonajes) {
+        const card = document.createElement('div');
+        card.classList.add('col');
+
+        const speciesUrl = personaje.species[0];
+        let species = 'Unknown';
+        if (speciesUrl) {
+            try {
+                const speciesResponse = await fetch(speciesUrl);
+                const speciesData = await speciesResponse.json();
+                species = speciesData.name;
+            } catch (error) {
+                console.error('Error fetching species:', error);
+            }
+        }
+
+        const planetUrl = personaje.homeworld;
+        let planet = 'Unknown';
+        if (planetUrl) {
+            try {
+                const planetResponse = await fetch(planetUrl);
+                const planetData = await planetResponse.json();
+                planet = planetData.name;
+            } catch (error) {
+                console.error('Error fetching planet:', error);
+            }
+        }
+
+        card.innerHTML = `
+            <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                <div class="card-body">
+                    <p class="card-text">
+                        Name: ${personaje.name}<br>
+                        Height: ${personaje.height} cm<br>
+                        Mass: ${personaje.mass} kg<br>
+                        Hair Color: ${personaje.hair_color}<br>
+                        Skin Color: ${personaje.skin_color}<br>
+                        Eye Color: ${personaje.eye_color}<br>
+                        Birth Year: ${personaje.birth_year}<br>
+                        Gender: ${personaje.gender}<br>
+                        Species: ${species}<br>
+                        Homeworld: ${planet}
+                    </p>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    }
+}
+
+
+
+
+
 window.addEventListener('load', async () => {
     const pelis = await fetchAPI('films/');
     acordeonPeliculas(pelis);
 
+    const perso = await fetchAPI('people/');
+    contenedorPersonas(perso);
+    
+    const planeta = await fetchAPI('planets/');
+    acordeonPeliculas(planeta);
+
+    const especie = await fetchAPI('species/');
+    contenedorPersonas(especie);
+
+    const vehiculos = await fetchAPI('vehicles/');
+    acordeonPeliculas(vehiculos);
+
+    const naves = await fetchAPI('people/');
+    contenedorPersonas(naves);
+    
+    
+
     // Asociar eventos de clic a los botones de filtro
-    document.querySelector('.btn-group a:nth-child(1)').addEventListener('click', () => {
+    document.querySelector('#btnPelis a:nth-child(1)').addEventListener('click', () => {
         acordeonPeliculas(pelis, 'episodio');
     });
 
-    document.querySelector('.btn-group a:nth-child(2)').addEventListener('click', () => {
+    document.querySelector('#btnPelis a:nth-child(2)').addEventListener('click', () => {
         acordeonPeliculas(pelis, 'fecha');
     });
+
+    document.querySelector('#btnAllPeople').addEventListener('click', async () => {
+    const perso = await fetchAPI('people/');
+    contenedorPersonas(perso, 'noSpecies');
+});
+document.querySelector('#btnFemale').addEventListener('click', async () => {
+    const perso = await fetchAPI('people/');
+    contenedorPersonas(perso, 'female');
+});
+document.querySelector('#btnMale').addEventListener('click', async () => {
+    const perso = await fetchAPI('people/');
+    contenedorPersonas(perso, 'male');
+});
+document.querySelector('#btnName').addEventListener('click', async () => {
+    const perso = await fetchAPI('people/');
+    contenedorPersonas(perso, 'name');
+});
+document.querySelector('#btnDroid').addEventListener('click', async () => {
+    const perso = await fetchAPI('people/');
+    contenedorPersonas(perso, 'droid');
+});
+
 });
