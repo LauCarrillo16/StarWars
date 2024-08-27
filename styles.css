@@ -93,6 +93,13 @@ body {
     padding: 50px 100px;
 }
 
+#btnPlanetas{
+    position: absolute;
+    left: 75%;
+    top: 70px;
+    z-index: 2;
+}
+
 
 
 @keyframes parpadear {

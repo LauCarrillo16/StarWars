@@ -54,7 +54,9 @@ function acordeonPeliculas(pelis, criterio) {
         }
     });
 
-    const accordionItems = document.querySelectorAll("#peliculas .accordion-item");
+    const accordionItems = document.querySelectorAll(
+        "#peliculas .accordion-item"
+    );
 
     pelis.results.slice(0, accordionItems.length).forEach((peli, index) => {
         const acordeonBody = accordionItems[index].querySelector(".accordion-body");
@@ -74,12 +76,22 @@ async function contenedorPersonas(perso, criterio) {
 
     let personajesFiltrados;
 
-    if (criterio === 'female') {
-        personajesFiltrados = perso.results.filter(personaje => personaje.gender === "female");
-    } else if (criterio === 'male') {
-        personajesFiltrados = perso.results.filter(personaje => personaje.gender === "male");
-    } else if (criterio === 'droid') {
-        personajesFiltrados = perso.results.filter(personaje => personaje.species.includes("https://swapi.dev/api/species/2/"));
+    if (criterio === "female") {
+        personajesFiltrados = perso.results.filter(
+            (personaje) => personaje.gender === "female"
+        );
+    } else if (criterio === "male") {
+        personajesFiltrados = perso.results.filter(
+            (personaje) => personaje.gender === "male"
+        );
+    } else if (criterio === "noSpecies") {
+        personajesFiltrados = perso.results.filter(
+            (personaje) => personaje.species.length === 0
+        );
+    } else if (criterio === "droid") {
+        personajesFiltrados = perso.results.filter((personaje) =>
+            personaje.species.includes("https://swapi.dev/api/species/2/")
+        );
     } else {
         personajesFiltrados = perso.results;
     }
@@ -140,6 +152,57 @@ async function contenedorPersonas(perso, criterio) {
     }
 }
 
+async function contenedorPlanetas(planetes, criterio) {
+    const container = document.querySelector("#planetas .row");
+    container.innerHTML = "";
+
+    let planetasFiltrados = planetes.results;
+
+    if (criterio === "gravity") {
+        planetasFiltrados.sort((a, b) => {
+            const extractGravityNumber = (gravity) => {
+                const match = gravity.match(/^([\d.]+)/); // Extrae el número al principio
+                return match ? parseFloat(match[1]) : 0; // Devuelve el número o 0 si no hay coincidencia
+            };
+
+            const gravityA = extractGravityNumber(a.gravity);
+            const gravityB = extractGravityNumber(b.gravity);
+            return gravityA - gravityB;
+        });
+    }
+
+    // Ordenar los planetas por nombre en orden alfabético
+    planetasFiltrados.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Obtener los primeros 10 planetas después de la ordenación
+    const primerosDiezPlanetas = planetasFiltrados.slice(0, 10);
+
+    // Crear las tarjetas para cada planeta
+    for (const planeta of primerosDiezPlanetas) {
+        const card = document.createElement("div");
+        card.classList.add("col");
+
+        card.innerHTML = `
+        <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                <div class="card-body">
+                    <p class="card-text">
+                        Name: ${planeta.name}<br>
+                        Climate: ${planeta.climate}<br>
+                        Diameter: ${planeta.diameter} km<br>
+                        Gravity: ${planeta.gravity || "n/a"}<br>
+                        Population: ${planeta.population}
+                    </p>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    }
+}
+
+
+
+
+
 window.addEventListener("load", async () => {
     const pelis = await fetchAPI(urlFilms);
     acordeonPeliculas(pelis);
@@ -147,32 +210,50 @@ window.addEventListener("load", async () => {
     const perso = await fetchAPI(urlPeople);
     contenedorPersonas(perso);
 
+    const planetes = await fetchAPI(urlPlanets);
+    contenedorPlanetas(planetes);
+
     // Asociar eventos de clic a los botones de filtro
     document.querySelector("#btnPelis a:nth-child(1)").addEventListener("click", () => {
-        acordeonPeliculas(pelis, "episodio");
-    });
+            acordeonPeliculas(pelis, "episodio");
+        });
 
     document.querySelector("#btnPelis a:nth-child(2)").addEventListener("click", () => {
-        acordeonPeliculas(pelis, "fecha");
-    });
+            acordeonPeliculas(pelis, "fecha");
+        });
 
     document.querySelector("#btnAllPeople").addEventListener("click", async () => {
-        const perso = await fetchAPI(urlPeople);
-        contenedorPersonas(perso);
-    });
+            const perso = await fetchAPI(urlPeople);
+            contenedorPersonas(perso, "noSpecies");
+        });
 
     document.querySelector("#btnFemale").addEventListener("click", async () => {
         const perso = await fetchAPI(urlPeople);
-        contenedorPersonas(perso, 'female');
+        contenedorPersonas(perso, "female");
     });
 
     document.querySelector("#btnMale").addEventListener("click", async () => {
         const perso = await fetchAPI(urlPeople);
-        contenedorPersonas(perso, 'male');
+        contenedorPersonas(perso, "male");
+    });
+
+    document.querySelector("#btnName").addEventListener("click", async () => {
+        const perso = await fetchAPI(urlPeople);
+        contenedorPersonas(perso, "name");
     });
 
     document.querySelector("#btnDroid").addEventListener("click", async () => {
         const perso = await fetchAPI(urlPeople);
-        contenedorPersonas(perso, 'droid');
+        contenedorPersonas(perso, "droid");
     });
+
+    document.querySelector("#btnGravity").addEventListener("click", async () =>{
+        const planetes = await fetchAPI(urlPlanets);
+        contenedorPlanetas(planetes, "gravity");
+    });
+
+    document.querySelector("#btnPlanetName").addEventListener("click", async () => {
+            const planets = await fetchAPI(urlPlanets);
+            contenedorPersonas(planets, "name");
+        });
 });
