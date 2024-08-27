@@ -26,11 +26,11 @@ window.addEventListener("resize", () => {
 });
 
 const urlFilms = "https://swapi.dev/api/films/";
-const urlPeople = "https://swapi.dev/api/people/";
-const urlPlanets = "https://swapi.dev/api/planets/";
-const urlSpecies = "https://swapi.dev/api/species/";
-const urlVehicles = "https://swapi.dev/api/vehicles/";
-const urlStarships = "https://swapi.dev/api/starships/";
+const urlPeople = "https://swapi.dev/api/people/?page=";
+const urlPlanets = "https://swapi.dev/api/planets/?page=";
+const urlSpecies = "https://swapi.dev/api/species/?page=";
+const urlVehicles = "https://swapi.dev/api/vehicles/?page=";
+const urlStarships = "https://swapi.dev/api/starships/?page=";
 
 async function fetchAPI(url) {
     try {
@@ -74,11 +74,11 @@ async function contenedorPersonas(perso, criterio) {
 
     let personajesFiltrados;
 
-    if (criterio === "female") {
+    if (criterio === 'female') {
         personajesFiltrados = perso.results.filter(personaje => personaje.gender === "female");
-    } else if (criterio === "male") {
+    } else if (criterio === 'male') {
         personajesFiltrados = perso.results.filter(personaje => personaje.gender === "male");
-    } else if (criterio === "droid") {
+    } else if (criterio === 'droid') {
         personajesFiltrados = perso.results.filter(personaje => personaje.species.includes("https://swapi.dev/api/species/2/"));
     } else {
         personajesFiltrados = perso.results;
@@ -163,16 +163,16 @@ window.addEventListener("load", async () => {
 
     document.querySelector("#btnFemale").addEventListener("click", async () => {
         const perso = await fetchAPI(urlPeople);
-        contenedorPersonas(perso, "female");
+        contenedorPersonas(perso, 'female');
     });
 
     document.querySelector("#btnMale").addEventListener("click", async () => {
         const perso = await fetchAPI(urlPeople);
-        contenedorPersonas(perso, "male");
+        contenedorPersonas(perso, 'male');
     });
 
     document.querySelector("#btnDroid").addEventListener("click", async () => {
         const perso = await fetchAPI(urlPeople);
-        contenedorPersonas(perso, "droid");
+        contenedorPersonas(perso, 'droid');
     });
 });
