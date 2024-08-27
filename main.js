@@ -157,47 +157,92 @@ async function contenedorPlanetas(planetes, criterio) {
     container.innerHTML = "";
 
     let planetasFiltrados = planetes.results;
-
-    if (criterio === "gravity") {
-        planetasFiltrados.sort((a, b) => {
-            const extractGravityNumber = (gravity) => {
-                const match = gravity.match(/^([\d.]+)/); // Extrae el número al principio
-                return match ? parseFloat(match[1]) : 0; // Devuelve el número o 0 si no hay coincidencia
-            };
-
-            const gravityA = extractGravityNumber(a.gravity);
-            const gravityB = extractGravityNumber(b.gravity);
-            return gravityA - gravityB;
-        });
+    if (criterio == "namePlanet") {
+        planetasFiltrados.sort((a, b) => a.name.localeCompare(b.name));
     }
-
-    // Ordenar los planetas por nombre en orden alfabético
-    planetasFiltrados.sort((a, b) => a.name.localeCompare(b.name));
+    
 
     // Obtener los primeros 10 planetas después de la ordenación
     const primerosDiezPlanetas = planetasFiltrados.slice(0, 10);
 
-    // Crear las tarjetas para cada planeta
+    // Crear las tarjetas para cada planeta basado en el criterio
     for (const planeta of primerosDiezPlanetas) {
         const card = document.createElement("div");
         card.classList.add("col");
 
-        card.innerHTML = `
-        <div class="card text-bg-warning mb-3" style="max-width: 18rem">
-                <div class="card-body">
-                    <p class="card-text">
-                        Name: ${planeta.name}<br>
-                        Climate: ${planeta.climate}<br>
-                        Diameter: ${planeta.diameter} km<br>
-                        Gravity: ${planeta.gravity || "n/a"}<br>
-                        Population: ${planeta.population}
-                    </p>
-                </div>
-            </div>
-        `;
+        let contenido;
+        switch (criterio) {
+            case "rotation":
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Name: ${planeta.name}<br>
+                                Rotation: ${planeta.rotation_period} hours
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+            case "orbital":
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Name: ${planeta.name}<br>
+                                Orbital: ${planeta.orbital_period}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+            case "diameter":
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Name: ${planeta.name}<br>
+                                Diameter: ${planeta.diameter} km
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+            case "surfaceWater":
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Name: ${planeta.name}<br>
+                                Surface Water: ${planeta.surface_water}%
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+            default:
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Name: ${planeta.name}<br>
+                                Rotation: ${planeta.rotation_period}<br>
+                                Orbital: ${planeta.orbital_period}<br>
+                                Diameter: ${planeta.diameter} km<br>
+                                Surface Water: ${planeta.surface_water}<br>
+                                Population: ${planeta.population}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+        }
+
+        card.innerHTML = contenido;
         container.appendChild(card);
     }
 }
+
 
 
 
@@ -247,13 +292,28 @@ window.addEventListener("load", async () => {
         contenedorPersonas(perso, "droid");
     });
 
-    document.querySelector("#btnGravity").addEventListener("click", async () =>{
+    document.querySelector("#btnRotation").addEventListener("click", async () => {
         const planetes = await fetchAPI(urlPlanets);
-        contenedorPlanetas(planetes, "gravity");
+        contenedorPlanetas(planetes, "rotation");
+    });
+    
+    document.querySelector("#btnOrbital").addEventListener("click", async () => {
+        const planetes = await fetchAPI(urlPlanets);
+        contenedorPlanetas(planetes, "orbital");
+    });
+    
+    document.querySelector("#btnDiameter").addEventListener("click", async () => {
+        const planetes = await fetchAPI(urlPlanets);
+        contenedorPlanetas(planetes, "diameter");
     });
 
-    document.querySelector("#btnPlanetName").addEventListener("click", async () => {
-            const planets = await fetchAPI(urlPlanets);
-            contenedorPersonas(planets, "name");
-        });
+    document.querySelector("#btnnamePlanet").addEventListener("click", async () => {
+        const planetes = await fetchAPI(urlPlanets);
+        contenedorPlanetas(planetes, "namePlanet");
+    });
+    
+    document.querySelector("#btnSurfaceWater").addEventListener("click", async () => {
+        const planetes = await fetchAPI(urlPlanets);
+        contenedorPlanetas(planetes, "surfaceWater");
+    });
 });
