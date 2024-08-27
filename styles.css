@@ -5,6 +5,7 @@
 
 
 
+
 .navbar-brand{
     color: #ffe81f;
 }
@@ -79,9 +80,16 @@ body {
     padding: 50px 100px;
 }
 
+#tituloPersonas{
+    font-size: 60px;
+    color: #ffe81f;
+    text-align:left;
+    font-family: 'StarJedi';
+}
+
 #btnPersonas{
     position: absolute;
-    left: 75%;
+    left: 70%;
     top: 70px;
     z-index: 2;
 }
@@ -93,11 +101,23 @@ body {
     padding: 50px 100px;
 }
 
+#tituloPlanets{
+    font-size: 60px;
+    color: #ffe81f;
+    text-align:left;
+    font-family: 'StarJedi';
+    padding-top: 3%;
+}
+
 #btnPlanetas{
     position: absolute;
-    left: 75%;
-    top: 70px;
+    left: 67%;
+    top: 16%;
     z-index: 2;
+}
+
+#planetasCard{
+    padding-top:8%;
 }
 
 
@@ -110,4 +130,3 @@ body {
         opacity: 0.2;
     }
 }
-
