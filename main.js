@@ -245,9 +245,75 @@ async function contenedorPlanetas(planetes, criterio) {
 
 
 
+/*soata especies */
+async function contenedorSpecies(species, criterio) {
+    const container = document.querySelector("#species .row");
+    container.innerHTML = "";
 
+    let SpeciesFiltradas = species.results;
+    if (criterio == "nameSpecie") {
+        SpeciesFiltradas.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    
 
+    // Obtener las primeras 10 especies después de la ordenación
+    const primerasDiezSpecies = SpeciesFiltradas.slice(0, 10);
 
+    // Crear las tarjetas para cada especie basado en el criterio
+    for (const especie of primerasDiezSpecies) {
+        const card = document.createElement("div");
+        card.classList.add("col");
+
+        let contenido;
+        switch (criterio) {
+            case "classification":
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Name: ${especie.name}<br>
+                                classification: ${especie.classification} 
+                                average height: ${especie.average_height}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+            case "designation":
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Name: ${especie.name}<br>
+                                designation: ${especie.designation}
+                                language: ${especie.language}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+            default:
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Name: ${especie.name}<br>
+                                classification: ${especie.classification}<br>
+                                designation: ${especie.designation}<br>
+                                average_height: ${especie.average_height} km<br>
+                                average_lifespan: ${especie.average_lifespan}<br>
+                                language: ${especie.language}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+        }
+
+        card.innerHTML = contenido;
+        container.appendChild(card);
+    }
+}
 window.addEventListener("load", async () => {
     const pelis = await fetchAPI(urlFilms);
     acordeonPeliculas(pelis);
@@ -257,6 +323,10 @@ window.addEventListener("load", async () => {
 
     const planetes = await fetchAPI(urlPlanets);
     contenedorPlanetas(planetes);
+
+    const Species = await fetchAPI(urlSpecies);/* soata species*/
+    contenedorSpecies(Species);/* soata Species*/
+
 
     // Asociar eventos de clic a los botones de filtro
     document.querySelector("#btnPelis a:nth-child(1)").addEventListener("click", () => {
@@ -316,4 +386,21 @@ window.addEventListener("load", async () => {
         const planetes = await fetchAPI(urlPlanets);
         contenedorPlanetas(planetes, "surfaceWater");
     });
+
+    document.querySelector("#btnnameSpecie").addEventListener("click", async () => {
+        const Species = await fetchAPI(urlSpecies);
+        contenedorSpecies(Species, "nameSpecie");
+    });
+    
+    document.querySelector("#btnClassification").addEventListener("click", async () => {
+        const Species = await fetchAPI(urlSpecies);
+        contenedorSpecies(Species, "classification");
+    });
+    
+    document.querySelector("#btnDesignation").addEventListener("click", async () => {
+        const Species = await fetchAPI(urlSpecies);
+        contenedorSpecies(Species, "designation");
+    });
+
 });
+// arzºia-current="page  
