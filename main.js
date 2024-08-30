@@ -160,7 +160,7 @@ async function contenedorPlanetas(planetes, criterio) {
     if (criterio == "namePlanet") {
         planetasFiltrados.sort((a, b) => a.name.localeCompare(b.name));
     }
-    
+
 
     // Obtener los primeros 10 planetas después de la ordenación
     const primerosDiezPlanetas = planetasFiltrados.slice(0, 10);
@@ -271,9 +271,9 @@ async function contenedorSpecies(species, criterio) {
                     <div class="card text-bg-warning mb-3" style="max-width: 18rem">
                         <div class="card-body">
                             <p class="card-text">
-                                Name: ${especie.name}<br>
-                                classification: ${especie.classification} 
-                                average height: ${especie.average_height}
+                                <strong>Name:</strong> ${especie.name}<br>
+                                <strong>Classification:</strong> ${especie.classification}<br>
+                                <strong>Average Height:</strong> ${especie.average_height} cm
                             </p>
                         </div>
                     </div>
@@ -284,9 +284,9 @@ async function contenedorSpecies(species, criterio) {
                     <div class="card text-bg-warning mb-3" style="max-width: 18rem">
                         <div class="card-body">
                             <p class="card-text">
-                                Name: ${especie.name}<br>
-                                designation: ${especie.designation}
-                                language: ${especie.language}
+                                <strong>Name:</strong> ${especie.name}<br>
+                                <strong>Designation:</strong> ${especie.designation}<br>
+                                <strong>Language:</strong> ${especie.language}
                             </p>
                         </div>
                     </div>
@@ -297,23 +297,24 @@ async function contenedorSpecies(species, criterio) {
                     <div class="card text-bg-warning mb-3" style="max-width: 18rem">
                         <div class="card-body">
                             <p class="card-text">
-                                Name: ${especie.name}<br>
-                                classification: ${especie.classification}<br>
-                                designation: ${especie.designation}<br>
-                                average_height: ${especie.average_height} km<br>
-                                average_lifespan: ${especie.average_lifespan}<br>
-                                language: ${especie.language}
+                                <strong>Name:</strong> ${especie.name}<br>
+                                <strong>Classification:</strong> ${especie.classification}<br>
+                                <strong>Designation:</strong> ${especie.designation}<br>
+                                <strong>Average Height:</strong> ${especie.average_height} cm<br>
+                                <strong>Average Lifespan:</strong> ${especie.average_lifespan} years<br>
+                                <strong>Language:</strong> ${especie.language}
                             </p>
                         </div>
                     </div>
                 `;
                 break;
-        }
+            }
 
-        card.innerHTML = contenido;
-        container.appendChild(card);
+            card.innerHTML = contenido;
+            container.appendChild(card);
     }
 }
+
 window.addEventListener("load", async () => {
     const pelis = await fetchAPI(urlFilms);
     acordeonPeliculas(pelis);
@@ -323,24 +324,25 @@ window.addEventListener("load", async () => {
 
     const planetes = await fetchAPI(urlPlanets);
     contenedorPlanetas(planetes);
-
-    const Species = await fetchAPI(urlSpecies);/* soata species*/
-    contenedorSpecies(Species);/* soata Species*/
+/* soata species*/
+    const speciesData = await fetchAPI(urlSpecies);
+    contenedorSpecies(speciesData, "nameSpecie");
 
 
     // Asociar eventos de clic a los botones de filtro
     document.querySelector("#btnPelis a:nth-child(1)").addEventListener("click", () => {
-            acordeonPeliculas(pelis, "episodio");
-        });
+        acordeonPeliculas(pelis, "episodio");
+    });
 
     document.querySelector("#btnPelis a:nth-child(2)").addEventListener("click", () => {
-            acordeonPeliculas(pelis, "fecha");
-        });
+        acordeonPeliculas(pelis, "fecha");
+    });
 
+    // Asociar eventos de clic a los botones de filtro para personas
     document.querySelector("#btnAllPeople").addEventListener("click", async () => {
-            const perso = await fetchAPI(urlPeople);
-            contenedorPersonas(perso, "noSpecies");
-        });
+        const perso = await fetchAPI(urlPeople);
+        contenedorPersonas(perso, "noSpecies");
+    });
 
     document.querySelector("#btnFemale").addEventListener("click", async () => {
         const perso = await fetchAPI(urlPeople);
@@ -362,45 +364,35 @@ window.addEventListener("load", async () => {
         contenedorPersonas(perso, "droid");
     });
 
-    document.querySelector("#btnRotation").addEventListener("click", async () => {
-        const planetes = await fetchAPI(urlPlanets);
+    // Asociar eventos de clic a los botones de filtro para planetas
+    document.querySelector("#btnRotation").addEventListener("click", () => {
         contenedorPlanetas(planetes, "rotation");
     });
-    
-    document.querySelector("#btnOrbital").addEventListener("click", async () => {
-        const planetes = await fetchAPI(urlPlanets);
+
+    document.querySelector("#btnOrbital").addEventListener("click", () => {
         contenedorPlanetas(planetes, "orbital");
     });
-    
-    document.querySelector("#btnDiameter").addEventListener("click", async () => {
-        const planetes = await fetchAPI(urlPlanets);
+
+    document.querySelector("#btnDiameter").addEventListener("click", () => {
         contenedorPlanetas(planetes, "diameter");
     });
 
-    document.querySelector("#btnnamePlanet").addEventListener("click", async () => {
-        const planetes = await fetchAPI(urlPlanets);
+    document.querySelector("#btnnamePlanet").addEventListener("click", () => {
         contenedorPlanetas(planetes, "namePlanet");
     });
-    
-    document.querySelector("#btnSurfaceWater").addEventListener("click", async () => {
-        const planetes = await fetchAPI(urlPlanets);
+
+    document.querySelector("#btnSurfaceWater").addEventListener("click", () => {
         contenedorPlanetas(planetes, "surfaceWater");
     });
 
-    document.querySelector("#btnnameSpecie").addEventListener("click", async () => {
-        const Species = await fetchAPI(urlSpecies);
-        contenedorSpecies(Species, "nameSpecie");
-    });
-    
-    document.querySelector("#btnClassification").addEventListener("click", async () => {
-        const Species = await fetchAPI(urlSpecies);
-        contenedorSpecies(Species, "classification");
-    });
-    
-    document.querySelector("#btnDesignation").addEventListener("click", async () => {
-        const Species = await fetchAPI(urlSpecies);
-        contenedorSpecies(Species, "designation");
+    // Asociar eventos de clic a los botones de filtro para especies
+    document.querySelector("#btnClassification").addEventListener("click", () => {
+        contenedorSpecies(speciesData, "classification");
     });
 
+    document.querySelector("#btnDesignation").addEventListener("click", () => {
+        contenedorSpecies(speciesData, "designation");
+    });
 });
-// arzºia-current="page  
+
+
