@@ -315,6 +315,76 @@ async function contenedorSpecies(species, criterio) {
     }
 }
 
+/* soata Starships */
+async function contenedorStarships(starship, criterio) {
+    const container = document.querySelector("#starships .row");
+    container.innerHTML = "";
+
+    let StarshipsFiltradas = starship?.results || [];
+    if (criterio == "nameStarship") {
+        StarshipsFiltradas.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    const primerasDiezStarships = StarshipsFiltradas.slice(0, 10);
+
+    for (const starship of primerasDiezStarships) {
+        const card = document.createElement("div");
+        card.classList.add("col");
+
+        let contenido;
+        switch (criterio) {
+            case "Manufacturer":
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong>Name:</strong> ${starship.name}<br>
+                                <strong>Manufacturer:</strong> ${starship.manufacturer}<br>
+                                <strong>Consumables:</strong> ${starship.consumables} years<br>
+                                <strong>Hyperdrive Rating:</strong> ${starship.hyperdrive_rating}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+            case "Passengers":
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong>Name:</strong> ${starship.name}<br>
+                                <strong>Passengers:</strong> ${starship.passengers}<br>
+                                <strong>Crew:</strong> ${starship.crew}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+            default:
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong>Name:</strong> ${starship.name}<br>
+                                <strong>Model:</strong> ${starship.model}<br>
+                                <strong>Cost in Credits:</strong> ${starship.cost_in_credits}<br>
+                                <strong>Length:</strong> ${starship.length} <br>
+                                <strong>Cargo Capacity:</strong> ${starship.cargo_capacity} years<br>
+                                <strong>Hyperdrive Rating:</strong> ${starship.hyperdrive_rating}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+        }
+
+        card.innerHTML = contenido;
+        container.appendChild(card);
+    }
+}
+
+
+
 window.addEventListener("load", async () => {
     const pelis = await fetchAPI(urlFilms);
     acordeonPeliculas(pelis);
@@ -327,6 +397,9 @@ window.addEventListener("load", async () => {
 /* soata species*/
     const speciesData = await fetchAPI(urlSpecies);
     contenedorSpecies(speciesData, "nameSpecie");
+/* soata starships*/
+const starshipsdata = await fetchAPI(urlStarships); 
+    contenedorStarships(starshipsdata, "nameStarship");
 
 
     // Asociar eventos de clic a los botones de filtro
@@ -393,6 +466,15 @@ window.addEventListener("load", async () => {
     document.querySelector("#btnDesignation").addEventListener("click", () => {
         contenedorSpecies(speciesData, "designation");
     });
+
+    // Asociar eventos de clic a los botones de filtro para starships
+    document.querySelector("#btnManufacturer").addEventListener("click", () => {
+        contenedorStarships(starshipsdata, "Manufacturer");
+    });
+    
+    document.querySelector("#btnPassengers").addEventListener("click", () => {
+        contenedorStarships(starshipsdata, "Passengers");  
+    });
+    
+    
 });
-
-
