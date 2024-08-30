@@ -243,8 +243,6 @@ async function contenedorPlanetas(planetes, criterio) {
     }
 }
 
-
-
 /*soata especies */
 async function contenedorSpecies(species, criterio) {
     const container = document.querySelector("#species .row");
@@ -254,7 +252,7 @@ async function contenedorSpecies(species, criterio) {
     if (criterio == "nameSpecie") {
         SpeciesFiltradas.sort((a, b) => a.name.localeCompare(b.name));
     }
-    
+
 
     // Obtener las primeras 10 especies después de la ordenación
     const primerasDiezSpecies = SpeciesFiltradas.slice(0, 10);
@@ -308,10 +306,10 @@ async function contenedorSpecies(species, criterio) {
                     </div>
                 `;
                 break;
-            }
+        }
 
-            card.innerHTML = contenido;
-            container.appendChild(card);
+        card.innerHTML = contenido;
+        container.appendChild(card);
     }
 }
 
@@ -340,7 +338,7 @@ async function contenedorStarships(starship, criterio) {
                             <p class="card-text">
                                 <strong>Name:</strong> ${starship.name}<br>
                                 <strong>Manufacturer:</strong> ${starship.manufacturer}<br>
-                                <strong>Consumables:</strong> ${starship.consumables} years<br>
+                                <strong>Consumables:</strong> ${starship.consumables} <br>
                                 <strong>Hyperdrive Rating:</strong> ${starship.hyperdrive_rating}
                             </p>
                         </div>
@@ -369,8 +367,80 @@ async function contenedorStarships(starship, criterio) {
                                 <strong>Model:</strong> ${starship.model}<br>
                                 <strong>Cost in Credits:</strong> ${starship.cost_in_credits}<br>
                                 <strong>Length:</strong> ${starship.length} <br>
-                                <strong>Cargo Capacity:</strong> ${starship.cargo_capacity} years<br>
+                                <strong>Cargo Capacity:</strong> ${starship.cargo_capacity} <br>
                                 <strong>Hyperdrive Rating:</strong> ${starship.hyperdrive_rating}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+        }
+
+        card.innerHTML = contenido;
+        container.appendChild(card);
+    }
+}
+
+/* soata Vehicles*/
+async function contenedorVehicles(vehicles, criterio) {
+    const container = document.querySelector("#vehicles .row");
+    container.innerHTML = "";
+
+    let vehiclesFiltrados = vehicles.results;
+    if (criterio === "model") {
+        vehiclesFiltrados.sort((a, b) => a.model.localeCompare(b.model));
+    } else if (criterio === "manufacturer") {
+        vehiclesFiltrados.sort((a, b) => a.manufacturer.localeCompare(b.manufacturer));
+    }
+    const primerosDiezVehicles = vehiclesFiltrados.slice(0, 10);
+
+    for (const vehicle of primerosDiezVehicles) {
+        const card = document.createElement("div");
+        card.classList.add("col");
+
+        let contenido;
+        switch (criterio) {
+            case "model":
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Name: ${vehicle.name}<br>
+                                Model: ${vehicle.model}<br>
+                                Length: ${vehicle.length}<br>
+                                Consumables: ${vehicle.consumables}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+            case "manufacturer":
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Name: ${vehicle.name}<br>
+                                Manufacturer: ${vehicle.manufacturer}<br>
+                                Cost in Credits: ${vehicle.cost_in_credits}<br>
+                                Max Atmosphering Speed: ${vehicle.max_atmosphering_speed}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                break;
+            default:
+                contenido = `
+                    <div class="card text-bg-warning mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Name: ${vehicle.name}<br>
+                                Model: ${vehicle.model}<br>
+                                Cost in Credits: ${vehicle.cost_in_credits}<br>
+                                Length: ${vehicle.length}<br>
+                                Max Atmosphering Speed: ${vehicle.max_atmosphering_speed}<br>
+                                Crew: ${vehicle.crew}<br>
+                                Passengers: ${vehicle.passengers}<br>
+                                Consumables: ${vehicle.consumables}
                             </p>
                         </div>
                     </div>
@@ -392,15 +462,21 @@ window.addEventListener("load", async () => {
     const perso = await fetchAPI(urlPeople);
     contenedorPersonas(perso);
 
-    const planetes = await fetchAPI(urlPlanets);
+    const planetes = await fetchAPI(urlPlanets);    
     contenedorPlanetas(planetes);
-/* soata species*/
-    const speciesData = await fetchAPI(urlSpecies);
-    contenedorSpecies(speciesData, "nameSpecie");
-/* soata starships*/
-const starshipsdata = await fetchAPI(urlStarships); 
-    contenedorStarships(starshipsdata, "nameStarship");
 
+    /* soata species*/
+    const speciesData = await fetchAPI(urlSpecies);
+    contenedorSpecies(speciesData,);
+    
+    /* soata starships*/
+    const starshipsdata = await fetchAPI(urlStarships);
+    contenedorStarships(starshipsdata,);
+
+    /* soata vehicles*/
+    const vehiclesdata = await fetchAPI(urlVehicles);
+    contenedorVehicles(vehiclesdata,);
+    
 
     // Asociar eventos de clic a los botones de filtro
     document.querySelector("#btnPelis a:nth-child(1)").addEventListener("click", () => {
@@ -471,10 +547,19 @@ const starshipsdata = await fetchAPI(urlStarships);
     document.querySelector("#btnManufacturer").addEventListener("click", () => {
         contenedorStarships(starshipsdata, "Manufacturer");
     });
-    
+
     document.querySelector("#btnPassengers").addEventListener("click", () => {
-        contenedorStarships(starshipsdata, "Passengers");  
+        contenedorStarships(starshipsdata, "Passengers");
+    });
+
+    // Asociar eventos de clic a los botones de filtro para Vehicles
+    document.querySelector("#btnModel").addEventListener("click", () => {
+        contenedorVehicles(vehiclesdata, "model");
     });
     
+    document.querySelector("#btnManufacturer1").addEventListener("click", () => {
+        contenedorVehicles(vehiclesdata, "manufacturer");
+    });
     
 });
+
