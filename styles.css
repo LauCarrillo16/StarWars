@@ -173,7 +173,31 @@ body {
     padding-top:6%;
 }
 
+#vehicles{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    padding: 50px 100px;
+}
 
+#tituloStarships{
+    font-size: 60px;
+    color: #ffe81f;
+    text-align:center;
+    font-family: 'StarJedi';
+    padding-top: 3%;
+}
+
+#btnVehicles{
+    position: absolute;
+    left: 80%;
+    top: 18%;
+    z-index: 2;
+}
+
+#vehiclesCard{
+    padding-top:6%;
+}
 @keyframes parpadear {
     0%, 100% {
         opacity: 0.8;
