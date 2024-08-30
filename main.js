@@ -467,15 +467,15 @@ window.addEventListener("load", async () => {
 
     /* soata species*/
     const speciesData = await fetchAPI(urlSpecies);
-    contenedorSpecies(speciesData,);
+    contenedorSpecies(speciesData);
     
     /* soata starships*/
     const starshipsdata = await fetchAPI(urlStarships);
-    contenedorStarships(starshipsdata,);
+    contenedorStarships(starshipsdata);
 
     /* soata vehicles*/
     const vehiclesdata = await fetchAPI(urlVehicles);
-    contenedorVehicles(vehiclesdata,);
+    contenedorVehicles(vehiclesdata);
     
 
     // Asociar eventos de clic a los botones de filtro
